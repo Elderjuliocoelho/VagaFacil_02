@@ -104,7 +104,7 @@ class _VagasPage extends State<VagasPage> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  HorarioBox(horario: '8:00', texto: 'Horario de Entrada'),
+                  HorarioBox(horario: '9:00', texto: 'Horario de Entrada'),
                   HorarioBox(horario: '15:00', texto: 'Horario de Saida'),
                 ],
               ),
