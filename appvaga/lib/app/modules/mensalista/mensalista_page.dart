@@ -7,6 +7,7 @@ class MensalistaPage extends GetView<MensalistaController> {
 
   @override
   Widget build(BuildContext context) {
+    List<bool> _selections = [true, false];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -26,11 +27,13 @@ class MensalistaPage extends GetView<MensalistaController> {
               height: 20,
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Get.offAllNamed('/menu');
+              },
               tileColor: const Color.fromARGB(0, 255, 115, 95),
               iconColor: Colors.white,
               leading: const Icon(Icons.directions_car_rounded, size: 40),
-              title: const Text(' ',
+              title: const Text('Voltar',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 25,
@@ -143,7 +146,23 @@ class MensalistaPage extends GetView<MensalistaController> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const SliderDistancia()
+                    const SliderDistancia(),
+                    const SizedBox(height: 30),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        BotaoAlternar(),
+                      ],
+                    ),
+                    const SizedBox(height: 35),
+                    const Row(
+                      children: [
+                        Text(
+                          'Nenhuma garagem encontrada\npara este endereço',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -186,7 +205,7 @@ class _SliderDistancia extends State<SliderDistancia> {
                 Colors.grey, // Altera a cor da faixa não preenchida
           ),
           child: SizedBox(
-            width: size.width*0.45,
+            width: size.width * 0.45,
             child: Slider(
               value: _currentValue,
               min: 1.0, // Valor mínimo da distância
@@ -206,6 +225,95 @@ class _SliderDistancia extends State<SliderDistancia> {
           style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
       ],
+    );
+  }
+}
+
+class BotaoAlternar extends StatefulWidget {
+  const BotaoAlternar({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _ColorChangingButtonState createState() => _ColorChangingButtonState();
+}
+
+class _ColorChangingButtonState extends State<BotaoAlternar> {
+  int _botaoSelected = 1; //1 para o priemiro, 2 para o segundo
+
+  void _toggleSeleciona(int buttonIndex) {
+    setState(() {
+      _botaoSelected = buttonIndex;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        MudarCorBotao(
+          texto: 'Menor Valor',
+          isSelected: _botaoSelected == 1,
+          onSelect: () {
+            _toggleSeleciona(1);
+          },
+        ),
+        MudarCorBotao(
+          texto: 'Menor Distância',
+          isSelected: _botaoSelected == 2,
+          onSelect: () {
+            _toggleSeleciona(2);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class MudarCorBotao extends StatelessWidget {
+  final bool isSelected;
+  final VoidCallback onSelect;
+  final String texto;
+
+  const MudarCorBotao({
+    super.key,
+    required this.isSelected,
+    required this.onSelect,
+    required this.texto,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: 38,
+      width: size.width * 0.42,
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
+      ),
+      child: InkWell(
+        onTap: onSelect,
+        child: Container(
+          decoration: BoxDecoration(
+            color:
+                isSelected ? const Color(0xFF0DD5E3) : const Color(0xFF201A30),
+            borderRadius: BorderRadius.circular(0),
+            border: Border.all(
+              color: const Color(0xFF0DD5E3), // Cor da borda
+              width: 1, // Tamanho da borda (10 pixels)
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            texto,
+            style: TextStyle(
+              color: isSelected ? const Color(0xFF201A30) : const Color(0xFF0DD5E3),
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
